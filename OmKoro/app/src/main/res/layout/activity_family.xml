@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ui.family.FamilyActivity">
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/family_layoutRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Permintaan Hubungan Keluarga" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/family_rvRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/recycleview_family" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="0.5dp"
+            android:background="#BDBDBD"
+            />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/family_layoutList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/family_layoutRequest">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Daftar Keluarga" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/family_rvList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/recycleview_family"
+            />
+
+
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/family_btnAddFamily"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/buttonprimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.892"
+        android:text="Tambah Keluarga"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="#fff"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

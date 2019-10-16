@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_height="300dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/dialog_permintaan_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@color/colorPrimaryDark"/>
+
+    <TextView
+        android:id="@+id/dialog_permintaan_nama"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nama nama"
+        android:textSize="18sp"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/dialog_permintaan_nip"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="nip nama"
+        android:textSize="18sp"
+        android:textAlignment="center"/>
+
+</LinearLayout>

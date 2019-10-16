@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".view.ui.beranda.BeritaMasyarakatFragment">
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/masyarakat_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ms_background_color="#fff"
+                android:padding="16dp"
+                android:fontFamily="@font/opensans_bold"
+                android:textColor="@color/colorPrimaryDark"
+                app:ms_text_color="@color/colorPrimaryDark"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="#BDBDBD"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/beritamasyarakat_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:listitem="@layout/recycleview_beritadashboard"/>
+
+
+        </LinearLayout>
+

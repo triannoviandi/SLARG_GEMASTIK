@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".view.ui.emergencyCall.EmergencyCallActivity">
+
+
+    <TextView
+        android:id="@+id/emergency_tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/opensans_bold"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:text="Pilih Layanan"/>
+
+    <LinearLayout
+        android:id="@+id/emergency_layoutContainer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emergency_tvTitle">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/emergency_card1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:cardCornerRadius="7dp"
+            android:layout_gravity="center"
+            app:cardUseCompatPadding="true"
+            android:stateListAnimator="@animator/touch"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginRight="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:src="@drawable/c1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="Rumah Sakit"
+                    />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/emergency_card2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:cardCornerRadius="7dp"
+            app:cardUseCompatPadding="true"
+            android:stateListAnimator="@animator/touch"
+            android:clickable="true"
+            android:focusable="true"
+            android:textAlignment="center"
+
+            android:foreground="?attr/selectableItemBackground"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:src="@drawable/c2"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="Tim SAR"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/emergency_layoutContainer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emergency_layoutContainer1"
+        android:gravity="center">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/emergency_card3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:cardCornerRadius="7dp"
+            android:layout_gravity="center"
+            app:cardUseCompatPadding="true"
+            android:stateListAnimator="@animator/touch"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginRight="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/c3"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="Polisi"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/emergency_card4"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:cardCornerRadius="7dp"
+            android:layout_gravity="center"
+            app:cardUseCompatPadding="true"
+            android:stateListAnimator="@animator/touch"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:src="@drawable/c4"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="Pemadam Kebakaran"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

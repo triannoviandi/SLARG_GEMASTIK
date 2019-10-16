@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Slarg</string>
+
+    <string name="lorem">Slarg</string>
+
+    <string-array name="provinsi">
+        <item>Sulawesi Tengah</item>
+        <item>Jawa Barat</item>
+    </string-array>
+
+    <string-array name="jabar">
+        <item>Bandung</item>
+        <item>Lampung</item>
+    </string-array>
+
+    <string-array name="sulteng">
+        <item>Kota Palu</item>
+        <item>Biromaru</item>
+    </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_evakuasi">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
