@@ -97,11 +97,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
         val img3 : Bitmap = resources.getDrawable(R.drawable.b3).toBitmap()
         val img4 : Bitmap = resources.getDrawable(R.drawable.b4).toBitmap()
         val img5 : Bitmap = resources.getDrawable(R.drawable.b5).toBitmap()
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", encodeTobase64(img1)))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", encodeTobase64(img2)))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", encodeTobase64(img3)))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", encodeTobase64(img4)))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", encodeTobase64(img5)))
+        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img1))
+        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa",img2))
+        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img3))
+        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img4))
+        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img5))
         val mutableList : MutableList<BeritaHome> = listBeritaHome
         var beritaAdapter = BeritaHomeAdapter(mutableList)
 

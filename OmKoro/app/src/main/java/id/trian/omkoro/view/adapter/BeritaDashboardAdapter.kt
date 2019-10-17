@@ -45,7 +45,7 @@ class BeritaDashboardAdapter(private val list: MutableList<BeritaDashboard>) : R
     //the class is hodling the list view
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItems(berita: BeritaDashboard) {
-            itemView.beritadashboard_img.setImageBitmap(decodeBase64(berita.gambar))
+            itemView.beritadashboard_img.setImageBitmap(berita.gambar)
             itemView.beritadashboard_judul.text = berita.judul
             itemView.beritadashboard_waktu.text = berita.waktu_pembuatan
             itemView.beritadashboard_pembuat.text = berita.penulis

@@ -31,17 +31,29 @@ import android.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColor
 import id.trian.omkoro.view.ui.beranda.HomeActivity
+import android.media.AudioAttributes
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
+
+
+
+
 
 class NotifGempaService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         message.data.let {
             notification(it["title"].toString(), it["message"].toString())
-
         }
     }
 
-    fun notification(message: String, title: String){
+    fun notification(title: String, message: String){
 
         val intent = Intent(this, HomeActivity::class.java).apply {
             this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -67,8 +79,17 @@ class NotifGempaService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "channel1", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
+            val att = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+            channel.enableVibration(true)
+            channel.enableLights(true)
+
+            channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000, 1000, 1000,1000 ,1000 , 1000)
+            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
             mNotificationManager.createNotificationChannel(channel)
         }
 
@@ -97,11 +118,12 @@ class NotifGempaService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+            var channel = NotificationChannel(
                 "channel11", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
-            mNotificationManager.createNotificationChannel(channel)
+
+
         }
 
         mNotificationManager.notify(1, builder.build())
@@ -129,10 +151,18 @@ class NotifGempaService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+            var channel = NotificationChannel(
                 "channel12", "notif",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+            val attributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+            channel.enableVibration(true)
+            channel.enableLights(true)
+            channel.vibrationPattern = longArrayOf(300, 300, 300)
+            channel.setSound(uri, attributes)
+
             mNotificationManager.createNotificationChannel(channel)
         }
 

@@ -1,13 +1,20 @@
 package id.trian.omkoro.service.repository
 
+import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import id.trian.omkoro.service.model.Berita
+import id.trian.omkoro.service.model.BeritaDashboard
 import id.trian.omkoro.service.model.User
 import kotlinx.coroutines.tasks.await
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -17,6 +24,9 @@ class FirebaseLoginRepository {
     var firestoreDB = FirebaseFirestore.getInstance()
     var myAccount = FirebaseAuth.getInstance()
     var uid = FirebaseAuth.getInstance().uid!!
+    var firebaseStorage = FirebaseStorage.getInstance()
+    var storageReference = firebaseStorage.reference
+
 
     //checkGempaState
     fun checkGempaState(): DocumentReference{
@@ -101,5 +111,46 @@ fun getRequestList(): Task<QuerySnapshot> {
         var documentReference = firestoreDB.collection("user").document(this.uid).collection("family_request").document(uid)
 
         return documentReference.delete()
+    }
+
+
+    fun saveUserLocation(geoPoint: GeoPoint){
+        val data = hashMapOf(
+            "last_location" to geoPoint,
+            "last_location_time" to FieldValue.serverTimestamp()
+        )
+        firestoreDB.collection("user").document(uid).update(data).addOnSuccessListener {
+            Log.d("galihloc", "bwer")
+        }
+
+        val data2 = hashMapOf(
+            "tes" to "tes"
+        )
+        firestoreDB.collection("user").document(uid).collection("tesgenerateloc").add(data2)
+    }
+
+
+    //BACKEND BERITA
+
+    fun uploadImage(uri: Uri): UploadTask {
+        val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy-hh-mm-ss")
+        val format = simpleDateFormat.format(Date())
+        val wew = storageReference.child("berita").child(uid + format)
+        return wew.putFile(uri)
+    }
+
+    fun uploadBeritaKebencanaan(berita: Berita, location: String): Task<DocumentReference> {
+        val data = hashMapOf(
+            "author" to berita.author,
+            "body" to berita.body,
+            "image" to location,
+            "publish_date" to FieldValue.serverTimestamp(),
+            "title" to berita.title,
+            "uid_author" to berita.uid_author,
+            "government" to berita.government
+        )
+        val wew = firestoreDB.collection("request_berita_kebencanaan")
+
+        return wew.add(data)
     }
 }

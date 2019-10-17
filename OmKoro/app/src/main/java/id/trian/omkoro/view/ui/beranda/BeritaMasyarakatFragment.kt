@@ -63,7 +63,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img1),
+                img1,
                 "123",
                 "Trian Noviandi/"
             )
@@ -72,7 +72,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img2),
+                img2,
                 "123",
                 "Trian Noviandi"
             )
@@ -81,7 +81,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img3),
+                img3,
                 "123",
                 "Trian Noviandi"
             )
@@ -90,7 +90,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img4),
+                img4,
                 "123",
                 "Trian Noviandi"
             )
@@ -99,7 +99,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img5),
+                img5,
                 "123",
                 "Trian Noviandi"
             )
@@ -108,7 +108,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img5),
+                img5,
                 "123",
                 "Trian Noviandi"
             )
@@ -117,7 +117,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img5),
+                img5,
                 "123",
                 "Trian Noviandi"
             )
@@ -126,7 +126,7 @@ class BeritaMasyarakatFragment : Fragment() {
             BeritaDashboard(
                 "Bantuan BMKG tepat sasaran di Daerah Palu",
                 "aaaaa",
-                encodeTobase64(img5),
+                img5,
                 "123",
                 "Trian Noviandi"
             )

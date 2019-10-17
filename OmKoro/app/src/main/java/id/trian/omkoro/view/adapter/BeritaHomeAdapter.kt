@@ -35,13 +35,12 @@ class BeritaHomeAdapter(private val list: MutableList<BeritaHome>) : RecyclerVie
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         Log.d("galih", "onbind")
         holder.bindItems(list[position])
-
     }
 
     //the class is hodling the list view
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItems(berita: BeritaHome) {
-           itemView.recycleview_berita_image.setImageBitmap(decodeBase64(berita.gambar))
+           itemView.recycleview_berita_image.setImageBitmap(berita.gambar)
             itemView.recycleview_berita_judul.text = berita.judul
             itemView.setOnClickListener {
                 onItemClickCallback?.onItemClicked(berita)

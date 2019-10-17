@@ -1,5 +1,6 @@
 package id.trian.omkoro.view.ui.beranda
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
@@ -8,12 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import android.os.Build
-import android.util.Log
-import android.view.MenuItem
-import id.trian.omkoro.R
 import com.shreyaspatil.MaterialDialog.AbstractDialog
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog
 import id.trian.omkoro.view.ui.emergencyCall.EmergencyCallActivity
+import androidx.core.content.ContextCompat
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import id.trian.omkoro.R
+import id.trian.omkoro.service.repository.FirebaseLoginRepository
+import id.trian.omkoro.utilities.MyWorker
+import java.util.concurrent.TimeUnit
+
 
 class HomeActivity : AppCompatActivity(){
 
@@ -35,6 +42,18 @@ class HomeActivity : AppCompatActivity(){
         val navController = findNavController(R.id.nav_host_fragment)
 
         navView.setupWithNavController(navController)
+
+     //   startJob()
+
+
+        val permission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+//If the location permission has been granted, then start the TrackerService//
+
+        bservice()
 
         val bundle=intent.extras
         if(bundle!=null)
@@ -69,5 +88,13 @@ class HomeActivity : AppCompatActivity(){
         mDialog.show()
 
     }
+
+
+fun bservice(){
+    val periodicWork: PeriodicWorkRequest = PeriodicWorkRequest.Builder(MyWorker::class.java, 15, TimeUnit.MINUTES)
+                            .addTag("MyWorker")
+                            .build();
+WorkManager.getInstance().enqueueUniquePeriodicWork("Location", ExistingPeriodicWorkPolicy.REPLACE, periodicWork);
+}
 
 }
