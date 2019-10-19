@@ -260,7 +260,7 @@ class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun updateMapLocation(location: Location?) {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(-0.885818, 119.869112)))
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f))
-        mMap.addMarker(MarkerOptions().position(LatLng(-0.885818, 119.869112)).title("Posisi Anda").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)))
+        mMap.addMarker(MarkerOptions().position(LatLng(-0.885818, 119.869112)).title("Posisi Anda").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_logistic)))
         Toast.makeText(this, "update", Toast.LENGTH_SHORT).show()
     }
 

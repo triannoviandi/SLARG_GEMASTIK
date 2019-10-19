@@ -151,22 +151,13 @@
             android:orientation="horizontal"
             >
 
-            <Button
-                android:id="@+id/inputBerita_btnLokasi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lokasi Bantuan"
-                android:textColor="#fff"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:textSize="10sp"
-                android:fontFamily="@font/opensans_regular"
-                android:drawableStart="@drawable/ic_location_on_black_24dp"/>
-
             <TextView
+                android:id="@+id/inputberita_tvKordinat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="*Masukkan Lokasi Bantuan"
-                android:textSize="10sp"
+                android:text="*Lokasi Bantuan"
+                android:textSize="12sp"
+                android:fontFamily="@font/opensans_regular"
                 android:layout_marginStart="16dp"
                 />
 
@@ -179,7 +170,6 @@
             android:background="@drawable/buttonprimary"
             android:textColor="#fff"
             android:fontFamily="@font/opensans_bold"
-
             android:layout_marginTop="32dp"
             android:text="Kirim"
             />

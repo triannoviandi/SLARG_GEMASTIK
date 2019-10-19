@@ -10,6 +10,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import id.trian.omkoro.service.model.Berita
+import id.trian.omkoro.service.model.BeritaBantuan
 import id.trian.omkoro.service.model.BeritaDashboard
 import id.trian.omkoro.service.model.User
 import kotlinx.coroutines.tasks.await
@@ -136,6 +137,7 @@ fun getRequestList(): Task<QuerySnapshot> {
         val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy-hh-mm-ss")
         val format = simpleDateFormat.format(Date())
         val wew = storageReference.child("berita").child(uid + format)
+        
         return wew.putFile(uri)
     }
 
@@ -144,7 +146,7 @@ fun getRequestList(): Task<QuerySnapshot> {
             "author" to berita.author,
             "body" to berita.body,
             "image" to location,
-            "publish_date" to FieldValue.serverTimestamp(),
+            "request_date" to FieldValue.serverTimestamp(),
             "title" to berita.title,
             "uid_author" to berita.uid_author,
             "government" to berita.government
@@ -153,4 +155,21 @@ fun getRequestList(): Task<QuerySnapshot> {
 
         return wew.add(data)
     }
+
+    fun uploadBeritaBantuan(berita: BeritaBantuan, location: String): Task<DocumentReference> {
+        val data = hashMapOf(
+            "author" to berita.author,
+            "body" to berita.body,
+            "image" to location,
+            "request_date" to FieldValue.serverTimestamp(),
+            "title" to berita.title,
+            "uid_author" to berita.uid_author,
+            "government" to berita.government,
+            "location" to berita.location
+        )
+        val wew = firestoreDB.collection("request_berita_bantuan")
+        return wew.add(data)
+    }
+
+
 }

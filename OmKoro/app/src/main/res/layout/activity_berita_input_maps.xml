@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/inputberitamap_rl"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/inputberitamap_ll">
+
+        <fragment
+            android:id="@+id/InputBeritaMap_Map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".view.ui.beranda.BeritaInputMapsActivity" />
+
+        <ImageView
+            android:paddingBottom="147dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/inputBeritaMap_Marker"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_marker_logistic_svg"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:padding="40dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/inputberitamap_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <TextView
+
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Posisikan lokasi bantuan"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textColor="@color/colorPrimaryDark"
+            />
+
+        <Button
+            android:id="@+id/inputBeritaMap_LockButton"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Kunci Lokasi"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

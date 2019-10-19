@@ -78,4 +78,6 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:commons:0.9.2.3'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.ornach.nobobutton:nobobutton:1.6'
+
 }
