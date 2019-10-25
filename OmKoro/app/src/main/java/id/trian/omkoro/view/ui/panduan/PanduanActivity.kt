@@ -22,22 +22,18 @@ class PanduanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_panduan)
-
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title
         actionbar!!.title = "Panduan Kesiagapan Gempa Bumi dan Tsunami"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
-
-
         pdfView()
     }
 
-
     fun pdfView(){
-
-        pdfView.fromAsset("split.pdf")
+        pdfView
+            .fromAsset("split.pdf")
             .enableSwipe(true) // allows to block changing pages using swipe
             .swipeHorizontal(false)
             .enableDoubletap(true)
@@ -51,5 +47,4 @@ class PanduanActivity : AppCompatActivity() {
             .invalidPageColor(Color.WHITE) // color of page that is invalid and cannot be loaded
             .load()
     }
-
 }

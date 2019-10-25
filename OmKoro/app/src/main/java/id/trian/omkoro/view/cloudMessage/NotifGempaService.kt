@@ -26,7 +26,6 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.media.RingtoneManager
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.R
 import android.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColor
@@ -38,35 +37,52 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
-
-
+import android.location.Location
+import android.os.Handler
+import android.os.Looper
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.GeoPoint
+import id.trian.omkoro.service.repository.FirebaseLoginRepository
+import java.io.IOException
 
 
 class NotifGempaService : FirebaseMessagingService() {
+
+    private var mFusedLocationClient: FusedLocationProviderClient? = null
+    private var mLocation: Location? = null
+
+    override fun onNewToken(p0: String) {
+        super.onNewToken(p0)
+        Log.d("tokentoken", p0)
+    }
 
     override fun onMessageReceived(message: RemoteMessage) {
         message.data.let {
             notification(it["title"].toString(), it["message"].toString())
         }
+        // some codes here
+    Handler(Looper.getMainLooper()).post {
+        tsunamiNotification()
+        }
     }
 
     fun notification(title: String, message: String){
+
+        val random = (0..100).random()
 
         val intent = Intent(this, HomeActivity::class.java).apply {
             this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
         intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
-
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, random, intent, PendingIntent.FLAG_ONE_SHOT)
         val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         var builder = NotificationCompat.Builder(this, "channel1")
             .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
+            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorPrimaryDark))
             .setContentTitle(title)
-            //.setContentText()
+            .setContentText(message)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setStyle(NotificationCompat.BigTextStyle()
@@ -92,211 +108,63 @@ class NotifGempaService : FirebaseMessagingService() {
             channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att)
             mNotificationManager.createNotificationChannel(channel)
         }
+        mNotificationManager.notify(random, builder.build())
 
-        mNotificationManager.notify(0, builder.build())
+
     }
 
-    fun notification1(){
+    fun tsunamiNotification(){
+        Log.d("galihloc", "masuk")
+        try {
+            Log.d("galihloc", "masuk2")
+            mFusedLocationClient?.lastLocation?.addOnCompleteListener { task ->
+                if (task.isSuccessful && task.result != null) {
+                    mLocation = task.result
+                    val geoPoint = GeoPoint(mLocation!!.latitude, mLocation!!.longitude)
+                    var firebaseDB = FirebaseLoginRepository()
+                    firebaseDB.saveUserLocation(geoPoint)
+                    Log.d("galihloc", geoPoint.toString())
 
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder = NotificationCompat.Builder(this, "channel11")
-            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
-            .setContentTitle("Pemeriksaan Keselamatan")
-            .setContentText("Robert Downey dalam keadaan selamat dan baik-baik saja")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(uri)
-
-        val mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            var channel = NotificationChannel(
-                "channel11", "notif",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-
-
+                } else {
+                    Log.d("galihloc", "err1")
+                }
+            }
+        } catch (e: IOException){
+            Log.d("galihloc", "err2")
         }
 
-        mNotificationManager.notify(1, builder.build())
+
+//        val intent = Intent(this, HomeActivity::class.java).apply {
+//            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        }
+//        intent.putExtra("fromNotifGempa", true)
+//        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_ONE_SHOT)
+//
+//        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+//        var builder = NotificationCompat.Builder(this, "channel11")
+//            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
+//            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
+//            .setContentTitle("Pemeriksaan Keselamatan")
+//            .setContentText("Robert Downey dalam keadaan selamat dan baik-baik saja")
+//            .setContentIntent(pendingIntent)
+//            .setAutoCancel(true)
+//            .setSound(uri)
+//
+//        val mNotificationManager =
+//            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            var channel = NotificationChannel(
+//                "channel11", "notif",
+//                NotificationManager.IMPORTANCE_HIGH
+//            )
+//
+//
+//        }
+//
+//        mNotificationManager.notify(1, builder.build())
     }
 
-    fun notification2(){
-
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 2, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder = NotificationCompat.Builder(this, "channel12")
-            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
-            .setContentTitle("Pemeriksaan Keselamatan")
-            .setContentText("Chris Evans dalam keadaan selamat dan baik-baik saja")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(uri)
-
-        val mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            var channel = NotificationChannel(
-                "channel12", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val attributes = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                .build()
-            channel.enableVibration(true)
-            channel.enableLights(true)
-            channel.vibrationPattern = longArrayOf(300, 300, 300)
-            channel.setSound(uri, attributes)
-
-            mNotificationManager.createNotificationChannel(channel)
-        }
-
-        mNotificationManager.notify(2, builder.build())
-    }
-
-    fun notification3(){
-
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 3, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder = NotificationCompat.Builder(this, "channel13")
-            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
-            .setContentTitle("Pemeriksaan Keselamatan")
-            .setContentText("Brie Larsony dalam keadaan selamat dan baik-baik saja")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(uri)
-
-        val mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "channel13", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            mNotificationManager.createNotificationChannel(channel)
-        }
-
-        mNotificationManager.notify(3, builder.build())
-    }
-
-    fun notification4(){
-
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 4, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder = NotificationCompat.Builder(this, "channel14")
-            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
-            .setContentTitle("Pemeriksaan Keselamatan")
-            .setContentText("Ryan Reynolds dalam keadaan selamat dan baik-baik saja")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(uri)
-
-        val mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "channel14", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            mNotificationManager.createNotificationChannel(channel)
-        }
-
-        mNotificationManager.notify(4, builder.build())
-    }
-
-    fun notification5(){
-
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 5, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder = NotificationCompat.Builder(this, "channel15")
-            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
-            .setContentTitle("Pemeriksaan Keselamatan")
-            .setContentText("Scarlett Johansson dalam keadaan selamat dan baik-baik saja")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(uri)
-
-        val mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "channel15", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            mNotificationManager.createNotificationChannel(channel)
-        }
-
-        mNotificationManager.notify(5, builder.build())
-    }
-
-
-    fun notification6(){
-
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        intent.putExtra("fromNotifGempa", true)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 5, intent, PendingIntent.FLAG_ONE_SHOT)
-
-        val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder = NotificationCompat.Builder(this, "channel15")
-            .setSmallIcon(id.trian.omkoro.R.drawable.ic_stat_app_icon)
-            .setColor(ContextCompat.getColor(applicationContext, id.trian.omkoro.R.color.colorRed))
-            .setContentTitle("Peringatan !")
-            .setContentText("Anda berada di Lokasi rawan tsunami tinggi, Segera berpindah ke lokasi lebih aman")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(uri)
-
-        val mNotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "channel15", "notif",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            mNotificationManager.createNotificationChannel(channel)
-        }
-
-        mNotificationManager.notify(5, builder.build())
-    }
 
     fun isAppIsInBackground(context: Context): Boolean {
         var isInBackground = true

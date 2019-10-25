@@ -1,13 +1,20 @@
 package id.trian.omkoro.viewmodel
 
 import android.util.Log
+import androidx.annotation.UiThread
 import androidx.lifecycle.*
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.iid.FirebaseInstanceId
 import id.trian.omkoro.service.model.RequestFamily
 import id.trian.omkoro.service.model.User
 import id.trian.omkoro.service.repository.FirebaseLoginRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.io.IOException
 
 class ProfileViewModel : ViewModel() {
 
@@ -19,10 +26,13 @@ class ProfileViewModel : ViewModel() {
     // save address to firebase
     fun saveProfile(user: User){
         firebaseRepository.saveProfile(user).addOnSuccessListener {
-            Log.d("wew", "success")
+            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                Log.d("wew", it.token)
+            }
+
+
         }
     }
-
 
     // get realtime updates from firebase regarding saved addresses
     fun getProfile(): LiveData<User>{
@@ -33,21 +43,14 @@ class ProfileViewModel : ViewModel() {
                 return@EventListener
             }
             thisuser.value = value!!.toObject(User::class.java)
-
         })
         return thisuser
     }
 
     fun checkExist(): LiveData<Boolean>{
-        firebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
-            if (value?.toObject(User::class.java) == null){
-                condition.value = false
-            } else {
-                condition.value = true
-            }
+        firebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> { value, _ ->
+            condition.value = value?.toObject(User::class.java) != null
         })
-
         return condition
     }
-
 }

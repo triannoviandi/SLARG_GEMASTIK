@@ -8,17 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import id.trian.omkoro.R
 import id.trian.omkoro.service.model.BeritaDashboard
+import id.trian.omkoro.service.model.BeritaGET
 import id.trian.omkoro.service.model.BeritaHome
 import kotlinx.android.synthetic.main.recycleview_beritadashboard.view.*
 import kotlinx.android.synthetic.main.recycleview_beritaterbaru.view.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
-class BeritaDashboardAdapter(private val list: MutableList<BeritaDashboard>) : RecyclerView.Adapter<BeritaDashboardAdapter.UserViewHolder>() {
+
+class BeritaDashboardAdapter(private val list: MutableList<BeritaGET>) : RecyclerView.Adapter<BeritaDashboardAdapter.UserViewHolder>() {
 
     private var onItemClickCallback: OnItemClickCallback? = null
 
-    public fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
@@ -34,39 +40,60 @@ class BeritaDashboardAdapter(private val list: MutableList<BeritaDashboard>) : R
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
 
         holder.bindItems(list[position])
-        Log.d("galihbro", "pos = $position")
-        Log.d("galihbro", "size = " + list.size.toString())
-        if (position == list.size-1){
-            Log.d("galihbro", "lastt")
-            holder.lastItem()
-        }
+
     }
 
     //the class is hodling the list view
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(berita: BeritaDashboard) {
-            itemView.beritadashboard_img.setImageBitmap(berita.gambar)
-            itemView.beritadashboard_judul.text = berita.judul
-            itemView.beritadashboard_waktu.text = berita.waktu_pembuatan
-            itemView.beritadashboard_pembuat.text = berita.penulis
+        fun bindItems(berita: BeritaGET) {
+            Glide.with(itemView.context).load(berita.image).centerCrop().placeholder(R.drawable.berita_background).into(itemView.beritadashboard_img)
+
+            //itemView.beritadashboard_img.setImageBitmap(berita.)
+            itemView.beritadashboard_judul.text = berita.title
+            itemView.beritadashboard_waktu.text = getDate(berita.publish_date.seconds)
+            itemView.beritadashboard_pembuat.text = berita.author
             itemView.setOnClickListener {
                 onItemClickCallback?.onItemClicked(berita)
+
             }
-        }
-
-        fun lastItem(){
-            itemView.pemerintah_viewEnd.requestLayout()
-            itemView.pemerintah_viewEnd.layoutParams.height = 200
-        }
-
-        fun decodeBase64(input: String): Bitmap {
-            val decodedByte = Base64.decode(input, 0)
-            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.size)
         }
 
 
     }
     interface OnItemClickCallback {
-        fun onItemClicked(data: BeritaDashboard)
+        fun onItemClicked(data: BeritaGET)
+    }
+
+    private fun getDate(milliSeconds: Long): String {
+        var calendar = Calendar.getInstance(Locale.ENGLISH)
+        calendar.timeInMillis=milliSeconds * 1000L
+        var date = android.text.format.DateFormat.format("E dd-MM-yyyy", calendar).toString()
+
+        var datereplaced : String
+        if (date.startsWith("Sun", 0,true)) {
+            datereplaced = date.replace("Sun", "Minggu", true)
+        }
+        else if (date.startsWith("Mon", 0,true)) {
+            datereplaced = date.replace("Mon", "Senin", true)
+        }
+        else if (date.startsWith("Tue", 0,true)) {
+            datereplaced = date.replace("Tue", "Selasa", true)
+        }
+        else if (date.startsWith("Wed", 0,true)) {
+            datereplaced = date.replace("Wed", "Rabu", true)
+        }
+        else if (date.startsWith("Thu", 0,true)) {
+            datereplaced = date.replace("Thu", "Kamis", true)
+        }
+        else if (date.startsWith("Fri", 0,true)) {
+            datereplaced = date.replace("Fri", "Jumat", true)
+        }
+        else if (date.startsWith("Sat", 0,true)) {
+            datereplaced = date.replace("Sat", "Sabtu", true)
+        } else {
+            datereplaced = ""
+        }
+
+        return datereplaced
     }
 }

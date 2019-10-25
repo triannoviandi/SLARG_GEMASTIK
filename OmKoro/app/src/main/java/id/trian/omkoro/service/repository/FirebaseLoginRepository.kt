@@ -2,12 +2,14 @@ package id.trian.omkoro.service.repository
 
 import android.net.Uri
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import id.trian.omkoro.service.model.Berita
 import id.trian.omkoro.service.model.BeritaBantuan
@@ -100,22 +102,39 @@ fun getRequestList(): Task<QuerySnapshot> {
         }
     }
 
-    fun acceptFamilyRequest(uid: String): Task<Void> {
-        var documentReference = firestoreDB.collection("user").document(this.uid).collection("family_list").document(uid)
+    fun alsoSetUrFamily(user: User, uid: String): Task<Void> {
+        var documentReference = firestoreDB.collection("user").document(uid).collection("family_list").document(user.uid)
+
         val data = hashMapOf(
-            "family_status" to true
+            "family_status" to true,
+            "uid" to user.uid,
+            "fotoProfile" to user.fotoProfile,
+            "nama" to user.nama,
+            "nip" to user.nip
+        )
+        return documentReference.set(data)
+    }
+
+    fun acceptFamilyRequest(user: User): Task<Void> {
+        var documentReference = firestoreDB.collection("user").document(this.uid).collection("family_list").document(user.uid)
+
+        val data = hashMapOf(
+            "family_status" to true,
+            "uid" to user.uid,
+            "fotoProfile" to user.fotoProfile,
+            "nama" to user.nama,
+            "nip" to user.nip
         )
         return documentReference.set(data)
     }
 
     fun deleteFamilyRequest(uid: String): Task<Void> {
         var documentReference = firestoreDB.collection("user").document(this.uid).collection("family_request").document(uid)
-
         return documentReference.delete()
     }
 
-
     fun saveUserLocation(geoPoint: GeoPoint){
+
         val data = hashMapOf(
             "last_location" to geoPoint,
             "last_location_time" to FieldValue.serverTimestamp()
@@ -169,6 +188,65 @@ fun getRequestList(): Task<QuerySnapshot> {
         )
         val wew = firestoreDB.collection("request_berita_bantuan")
         return wew.add(data)
+    }
+
+    fun getBeritaKebencanaanPemerintah(): Task<QuerySnapshot> {
+        var documentReference = firestoreDB.collection("berita_kebencanaan").whereEqualTo("government",true)
+        return documentReference.get()
+    }
+
+    fun getBeritaBantuanPemerintah(): Task<QuerySnapshot> {
+        var documentReference = firestoreDB.collection("berita_bantuan").whereEqualTo("government",true)
+        return documentReference.get()
+    }
+
+    fun getBeritaKebencanaanMasyarakat(): Task<QuerySnapshot> {
+        var documentReference = firestoreDB.collection("berita_kebencanaan").whereEqualTo("government",false)
+        return documentReference.get()
+    }
+
+    fun getBeritaBantuanMasyarakat(): Task<QuerySnapshot> {
+        var documentReference = firestoreDB.collection("berita_bantuan").whereEqualTo("government",false)
+        return documentReference.get()
+    }
+
+    fun getAnotherProfile(uid: String): DocumentReference {
+        var documentReference = firestoreDB.collection("user").document(uid)
+        return documentReference
+    }
+
+    fun checkStateGempa(): Task<DocumentSnapshot> {
+        var documentReference = firestoreDB.collection("state").document("sedang_gempa")
+        return documentReference.get()
+    }
+
+    fun checkNotifExist(): Task<DocumentSnapshot> {
+        var documentReference = firestoreDB.collection("state").document("sedang_gempa").collection("notify_user").document(uid)
+        return documentReference.get()
+    }
+
+    fun emergencyCall(location: GeoPoint, user: User): Task<DocumentReference> {
+
+        val data = hashMapOf(
+            "requester_name" to user.nama,
+            "requester_uid" to user.uid,
+            "requester_location" to location
+        )
+
+        var documentReference = firestoreDB.collection("hospital_call_request")
+        return documentReference.add(data)
+    }
+
+    fun sendNotifToFamily(family_uid : String, profile: User): Task<DocumentReference> {
+        val data = hashMapOf(
+            "from" to uid,
+            "to" to family_uid,
+            "body" to "Saya dalam keadaan baik-baik saja",
+            "nama" to profile.nama
+        )
+
+        var documentReference = firestoreDB.collection("messages").document(family_uid).collection("to")
+        return documentReference.add(data)
     }
 
 

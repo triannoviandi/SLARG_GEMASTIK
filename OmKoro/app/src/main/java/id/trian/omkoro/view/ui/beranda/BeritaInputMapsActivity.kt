@@ -84,6 +84,8 @@ class BeritaInputMapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleM
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.InputBeritaMap_Map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -114,7 +116,7 @@ class BeritaInputMapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleM
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location : Location? ->
                     myLocation = LatLng(location!!.latitude, location.longitude)
-                    mMap.addMarker(MarkerOptions().position(LatLng(location!!.latitude, location.longitude)).title("Lokasi Bantuan").icon(
+                    mMap.addMarker(MarkerOptions().position(LatLng(location.latitude, location.longitude)).title("Lokasi Bantuan").icon(
                         getMarker()))
 
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 15.0f))
@@ -136,7 +138,7 @@ class BeritaInputMapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleM
         var vectorDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_marker_logistic_svg, null)
         var bitmap = Bitmap.createBitmap(vectorDrawable!!.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
         var canvas = Canvas(bitmap)
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }

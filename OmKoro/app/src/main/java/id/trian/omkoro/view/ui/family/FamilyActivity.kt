@@ -92,7 +92,7 @@ class FamilyActivity : AppCompatActivity(), View.OnClickListener {
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
         dialog()
-       getRequestList()
+        getRequestList()
         getFamilyList()
         //getRecycleViewRequestList
         //getRequestList()
@@ -141,17 +141,19 @@ class FamilyActivity : AppCompatActivity(), View.OnClickListener {
                         }
                     }
                     callAdapterFamily(dummyFamilylist)
+                    dismissLoadingList++
+                    dismissDialog()
                 }
             } else{
                 Log.d("galihtes", "negg")
+                dismissLoadingList++
+                dismissDialog()
             }
-            dismissLoadingList++
-            dismissDialog()
+
         })
     }
 
     private fun getRequestList(){
-
         try {
             familyViewModel.getRequestCollection()?.observe(this, Observer {
                 if (!it.isEmpty() && it[0].uid != "thisisnull"){
@@ -169,12 +171,15 @@ class FamilyActivity : AppCompatActivity(), View.OnClickListener {
                             }
                         }
                         callAdapter(dummy)
+                        dismissLoadingReq++
+                        dismissDialog()
                     }
                 } else {
                     family_layoutRequest.visibility = View.GONE
+                    dismissLoadingReq++
+                    dismissDialog()
                 }
-                dismissLoadingReq++
-                dismissDialog()
+
             })
 
         } catch (e: Exception){
@@ -228,7 +233,9 @@ class FamilyActivity : AppCompatActivity(), View.OnClickListener {
         CoroutineScope(Dispatchers.Main).launch{
             val add = familyViewModel.addRequestFamily(input)
             when (add) {
-                true -> Toast.makeText(applicationContext, "Berhasil menambahkan keluarga !", Toast.LENGTH_SHORT).show()
+                true -> {
+                    Toast.makeText(applicationContext, "Berhasil menambahkan keluarga !", Toast.LENGTH_SHORT).show()
+                }
                 false -> Toast.makeText(applicationContext, "Gagal menambahkan keluarga !", Toast.LENGTH_SHORT).show()
             }
         }
@@ -264,7 +271,7 @@ class FamilyActivity : AppCompatActivity(), View.OnClickListener {
         val tvText= TextView(this)
         tvText.text = "Loading ..."
         tvText.setTextColor(Color.parseColor("#000000"))
-        tvText.setLayoutParams(llParam)
+        tvText.layoutParams = llParam
 
         ll.addView(progressBar)
         ll.addView(tvText)
@@ -288,7 +295,17 @@ class FamilyActivity : AppCompatActivity(), View.OnClickListener {
 
     fun addRequestToFamilyList(user: User){
         try {
-            familyViewModel.acceptRequestFamily(user.uid)
+            familyViewModel.acceptRequestFamily(user).observeForever {
+                Log.d("galihfamily", it.toString())
+                if (it!= null){
+                    if (it){
+                        finish()
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                    }
+                }
+            }
         } catch (e : IOException){
 
         }

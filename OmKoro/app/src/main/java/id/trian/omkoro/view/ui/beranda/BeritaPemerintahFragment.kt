@@ -1,18 +1,24 @@
 package id.trian.omkoro.view.ui.beranda
 
-
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.GeoPoint
 import id.trian.omkoro.service.model.*
 import id.trian.omkoro.R
 import id.trian.omkoro.service.model.BeritaHome
@@ -20,16 +26,22 @@ import id.trian.omkoro.view.adapter.BeritaHomeAdapter
 import kotlinx.android.synthetic.main.fragment_berita_pemerintah.*
 import java.io.ByteArrayOutputStream
 import id.trian.omkoro.view.adapter.*
+import id.trian.omkoro.viewmodel.GetBeritaViewModel
+import id.trian.omkoro.viewmodel.ProfileViewModel
 import kotlinx.android.synthetic.main.fragment_berita_masyarakat.*
-
 
 class BeritaPemerintahFragment : Fragment() {
 
     lateinit var recycleViewBerita : RecyclerView
+    lateinit var getBeritaViewModel : GetBeritaViewModel
+    lateinit var dialog : AlertDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        getBeritaViewModel = ViewModelProviders.of(this)
+            .get(GetBeritaViewModel::class.java)
         return inflater.inflate(R.layout.fragment_berita_pemerintah, container, false)
     }
 
@@ -42,87 +54,159 @@ class BeritaPemerintahFragment : Fragment() {
         val list = ArrayList<String>()
         list.add("Kebencanaan")
         list.add("Bantuan")
-        pemerintah_spiner.setItems(list)
-
         callAdapter()
+        pemerintah_spiner.setItems(list)
+        pemerintah_spiner.setOnItemSelectedListener { view, position, id, item ->
+            when (position) {
+                0 -> callAdapter()
+                1 -> callAdapterBantuan()
+            }
+        }
+
+
+
+    }
+
+    private fun callAdapterBantuan() {
+        dialog()
+        getBeritaViewModel.getBeritaBantuanPemerintah()!!.observe(this, Observer {
+            Log.d("galihberitata", "berubah")
+            if (!it.isEmpty()){
+                var listBeritaBantuanPemerintah = ArrayList<BeritaGET>()
+                it.forEach {thisBerita ->
+                    listBeritaBantuanPemerintah.add(thisBerita)
+                }
+                val mutableList : MutableList<BeritaGET> = listBeritaBantuanPemerintah
+                var beritaAdapter = BeritaDashboardAdapter(mutableList)
+
+                beritaAdapter.setOnItemClickCallback(object : BeritaDashboardAdapter.OnItemClickCallback{
+                    override fun onItemClicked(data: BeritaGET) {
+                        var beritaPass = BeritaGETLatLong(
+                            data.id,
+                            data.category,
+                            data.title,
+                            data.body,
+                            data.author,
+                            data.image,
+                            data.uid_author,
+                            data.government,
+                            data.location.latitude,
+                            data.location.longitude,
+                            data.publish_date
+                        )
+
+                        var intent = Intent(context, BeritaDetail::class.java)
+                        intent.putExtra("detail_berita", beritaPass)
+                        if (data.category == "bantuan"){
+                            intent.putExtra("bantuan", true)
+                        } else {
+                            intent.putExtra("bantuan", false)
+                        }
+                        startActivity(intent)
+
+                    }
+
+                })
+                val adapter = beritaAdapter
+                recycleViewBerita.adapter = adapter
+            } else {
+
+            }
+            dialog.dismiss()
+        })
+
+
     }
 
     private fun callAdapter(){
-        var listBeritaHome = ArrayList<BeritaDashboard>()
-        val img1 : Bitmap = resources.getDrawable(R.drawable.b1).toBitmap()
-        val img2 : Bitmap = resources.getDrawable(R.drawable.b2).toBitmap()
-        val img3 : Bitmap = resources.getDrawable(R.drawable.b3).toBitmap()
-        val img4 : Bitmap = resources.getDrawable(R.drawable.b4).toBitmap()
-        val img5 : Bitmap = resources.getDrawable(R.drawable.b5).toBitmap()
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img1,
-                "123",
-                "Trian"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img2,
-                "123",
-                "Trian"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img3,
-                "123",
-                "Trian"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img4,
-                "123",
-                "Trian"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img5,
-                "123",
-                "Trian"
-            )
-        )
-        val mutableList : MutableList<BeritaDashboard> = listBeritaHome
-        var beritaAdapter = BeritaDashboardAdapter(mutableList)
+        dialog()
+        getBeritaViewModel.getBeritaKebencanaanPemerintah()!!.observe(this, Observer {
+            Log.d("galihberitata", "berubah")
+            if (!it.isEmpty()){
+                var listBeritaKebencanaanPemerintah = ArrayList<BeritaGET>()
+                it.forEach {thisBerita ->
+                    listBeritaKebencanaanPemerintah.add(thisBerita)
+                }
+                val mutableList : MutableList<BeritaGET> = listBeritaKebencanaanPemerintah
+                var beritaAdapter = BeritaDashboardAdapter(mutableList)
 
-        beritaAdapter.setOnItemClickCallback(object : BeritaDashboardAdapter.OnItemClickCallback{
-            override fun onItemClicked(data: BeritaDashboard) {
+                beritaAdapter.setOnItemClickCallback(object : BeritaDashboardAdapter.OnItemClickCallback{
+                    override fun onItemClicked(data: BeritaGET) {
+                        var beritaPass = BeritaGETLatLong(
+                            data.id,
+                            data.category,
+                            data.title,
+                            data.body,
+                            data.author,
+                            data.image,
+                            data.uid_author,
+                            data.government,
+                            data.location.latitude,
+                            data.location.longitude,
+                            data.publish_date
+                        )
+                        var intent = Intent(context, BeritaDetail::class.java)
+                        intent.putExtra("detail_berita", beritaPass)
+                        intent.putExtra("bantuan", false)
+                        startActivity(intent)
+
+                    }
+
+                })
+                val adapter = beritaAdapter
+                recycleViewBerita.adapter = adapter
+            } else {
+
             }
-
+            dialog.dismiss()
         })
 
-        val adapter = beritaAdapter
-        recycleViewBerita.adapter = adapter
+
     }
 
+    fun dialog(){
+        val padding  = 30
+        val ll : LinearLayout = LinearLayout(context)
+        ll.orientation = LinearLayout.HORIZONTAL
+        ll.setPadding(padding, padding, padding, padding)
+        ll.gravity = Gravity.CENTER
+        var llParam = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        llParam.gravity = Gravity.CENTER
+        ll.layoutParams = llParam
 
-    fun decodeBase64(input: String): Bitmap? {
-        val decodedByte = Base64.decode(input, 0)
-        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.size)
+        val progressBar = ProgressBar(context)
+        progressBar.isIndeterminate = true
+        progressBar.setPadding(0,0, padding,0)
+        progressBar.layoutParams = llParam
+
+        llParam = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        llParam.gravity = Gravity.CENTER
+        val tvText= TextView(context)
+        tvText.text = "Loading ..."
+        tvText.setTextColor(Color.parseColor("#000000"))
+        tvText.layoutParams = llParam
+
+        ll.addView(progressBar)
+        ll.addView(tvText)
+
+        val builder = AlertDialog.Builder(context)
+        builder.setCancelable(true)
+        builder.setView(ll)
+
+        dialog = builder.create()
+        dialog.show()
+        val window = dialog.window
+        if (window != null){
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(dialog.window!!.attributes)
+            layoutParams.width = 700
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            dialog.window!!.attributes = layoutParams
+        }
     }
 
-    fun encodeTobase64(image: Bitmap): String {
-        val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.PNG, 100, baos)
-        val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
-    }
 
 }

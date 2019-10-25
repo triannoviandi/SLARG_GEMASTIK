@@ -1,12 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.ui.beranda.BeritaDetail">
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        tools:context=".view.ui.beranda.BeritaDetail">
+
+        <LinearLayout
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/beritaDetail_judul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Judul Berita Kebencanaan hari ini yang terjadi"
+                android:fontFamily="@font/opensans_bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginBottom="16dp"
+                android:textSize="24sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/beritaDetail_authorImg"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/profile"/>
+
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/beritaDetail_date"
+                        android:fontFamily="@font/opensans_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sabtu, 19 September 2019"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/beritaDetail_authorName"
+                        android:fontFamily="@font/opensans_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="Trian Noviandi"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/beritaDetail_image"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/berita_background"/>
+
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:id="@+id/BeritaDetail_btnLokasiBantuan"
+            android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            android:stateListAnimator="@animator/touch"
+            android:clickable="true"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="0dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/logistic"
+                    android:layout_marginRight="16dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Lokasi Bantuan"/>
+
+            </LinearLayout>
 
 
 
-</LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:id="@+id/beritaDetail_body"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source."/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginBottom="16dp"
+            android:id="@+id/pemerintah_hr2"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+
+            android:background="#BDBDBD"
+            />
+
+        <TextView
+            android:paddingLeft="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Berita Kebencanaan"/>
+
+        <TextView
+            android:id="@+id/beritaDetail_government"
+            android:paddingLeft="24dp"
+            android:layout_marginBottom="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Oleh Masyarakat"/>
+
+    </LinearLayout>
+
+</ScrollView>

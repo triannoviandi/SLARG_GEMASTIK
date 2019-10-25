@@ -33,7 +33,9 @@ import android.os.Build
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toolbar
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
+import id.trian.omkoro.service.repository.FirebaseLoginRepository
 import id.trian.omkoro.view.ui.beranda.BerandaActivity
 import id.trian.omkoro.view.ui.beranda.HomeActivity
 
@@ -74,8 +76,8 @@ class ProfileSettingActivity : AppCompatActivity(), View.OnClickListener {
         val listJabar = jabarArray.toList()
 
 
-        val spinner = findViewById(R.id.profile_spinnerProvinsi) as MaterialSpinner
-        val spinner2 = findViewById(R.id.profile_spinnerKota) as MaterialSpinner
+        val spinner = findViewById<MaterialSpinner>(R.id.profile_spinnerProvinsi)
+        val spinner2 = findViewById<MaterialSpinner>(R.id.profile_spinnerKota)
 
         spinner.setItems(listProv)
         spinner2.setItems(listSulteng)
@@ -163,6 +165,7 @@ class ProfileSettingActivity : AppCompatActivity(), View.OnClickListener {
                 uid!!
                 )
 
+
             firestoreViewModel.saveProfile(setUser)
 
             FirebaseMessaging.getInstance().subscribeToTopic("palu")
@@ -174,7 +177,7 @@ class ProfileSettingActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             val intent : Intent = Intent(this, HomeActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
 
         } else {
@@ -198,8 +201,8 @@ class ProfileSettingActivity : AppCompatActivity(), View.OnClickListener {
                         profile_edtNip.setText(it.nip)
                         profile_edtNoHp.setText(it.nomorhp)
                         profile_edtAlamat.setText(it.alamat)
-                        profile_spinnerProvinsi.setText(it.provinsi)
-                        profile_spinnerKota.setText(it.kota)
+                        profile_spinnerProvinsi.text = it.provinsi
+                        profile_spinnerKota.text = it.kota
                     })
                 } else {
                     Log.d("wewe", "falsee")

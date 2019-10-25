@@ -1,21 +1,27 @@
 package id.trian.omkoro.view.ui.beranda
 
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import id.trian.omkoro.R
 import id.trian.omkoro.service.model.BeritaDashboard
+import id.trian.omkoro.service.model.BeritaGET
 import id.trian.omkoro.view.adapter.BeritaDashboardAdapter
+import id.trian.omkoro.viewmodel.GetBeritaViewModel
 import kotlinx.android.synthetic.main.fragment_berita_masyarakat.*
 import kotlinx.android.synthetic.main.fragment_berita_pemerintah.*
 import java.io.ByteArrayOutputStream
@@ -26,15 +32,28 @@ import java.io.ByteArrayOutputStream
 class BeritaMasyarakatFragment : Fragment() {
 
     lateinit var recycleViewBerita : RecyclerView
+    lateinit var getBeritaViewModel : GetBeritaViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        getBeritaViewModel = ViewModelProviders.of(this)
+            .get(GetBeritaViewModel::class.java)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_berita_masyarakat, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("galihpager","mas res")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("galihpager","mas pau")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,95 +72,25 @@ class BeritaMasyarakatFragment : Fragment() {
 
 
     private fun callAdapter(){
-        var listBeritaHome = ArrayList<BeritaDashboard>()
-        val img1 : Bitmap = resources.getDrawable(R.drawable.b1).toBitmap()
-        val img2 : Bitmap = resources.getDrawable(R.drawable.b2).toBitmap()
-        val img3 : Bitmap = resources.getDrawable(R.drawable.b3).toBitmap()
-        val img4 : Bitmap = resources.getDrawable(R.drawable.b4).toBitmap()
-        val img5 : Bitmap = resources.getDrawable(R.drawable.b5).toBitmap()
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img1,
-                "123",
-                "Trian Noviandi/"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img2,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img3,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img4,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img5,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img5,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img5,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        listBeritaHome.add(
-            BeritaDashboard(
-                "Bantuan BMKG tepat sasaran di Daerah Palu",
-                "aaaaa",
-                img5,
-                "123",
-                "Trian Noviandi"
-            )
-        )
-        val mutableList : MutableList<BeritaDashboard> = listBeritaHome
-        var beritaAdapter = BeritaDashboardAdapter(mutableList)
-
-        beritaAdapter.setOnItemClickCallback(object : BeritaDashboardAdapter.OnItemClickCallback{
-            override fun onItemClicked(data: BeritaDashboard) {
+        getBeritaViewModel.getBeritaKebencanaanMasyarakat()!!.observe(this, Observer {
+            var listBeritaKebencanaanMasyarakat = ArrayList<BeritaGET>()
+            it.forEach {thisBerita ->
+                listBeritaKebencanaanMasyarakat.add(thisBerita)
             }
+            val mutableList : MutableList<BeritaGET> = listBeritaKebencanaanMasyarakat
+            var beritaAdapter = BeritaDashboardAdapter(mutableList)
 
+            beritaAdapter.setOnItemClickCallback(object : BeritaDashboardAdapter.OnItemClickCallback{
+                override fun onItemClicked(data: BeritaGET) {
+                    startActivity(Intent(context, BeritaGET::class.java))
+                    Log.d("galihberita", "sini")
+                }
+
+            })
+
+            val adapter = beritaAdapter
+            recycleViewBerita.adapter = adapter
         })
-
-        val adapter = beritaAdapter
-        recycleViewBerita.adapter = adapter
     }
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:stateListAnimator="@animator/touch"
-    android:clickable="true"
-    android:focusable="true"
+<LinearLayout
+    android:id="@+id/rv_beritahome"
+    android:stateListAnimator="@animator/touch"
     android:foreground="?attr/selectableItemBackground"
     android:layout_width="160dp"
     android:layout_height="200dp"
@@ -13,8 +13,6 @@
 
     <androidx.cardview.widget.CardView
         android:stateListAnimator="@animator/touch"
-        android:clickable="true"
-        android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +33,9 @@
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
                 app:riv_corner_radius="5dp"
-                android:src="@drawable/b5"/>
+                android:src="@drawable/b5"
+
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

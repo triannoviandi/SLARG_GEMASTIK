@@ -28,6 +28,7 @@ import android.util.Log
 import android.widget.Toast
 import java.io.*
 import com.google.android.gms.maps.model.*
+import com.google.firebase.firestore.GeoPoint
 import id.trian.omkoro.service.model.BeritaBantuan
 import java.util.*
 import kotlin.collections.ArrayList
@@ -73,7 +74,7 @@ class BeritaInput : AppCompatActivity(), View.OnClickListener {
 
         val list = ArrayList<String>()
         list.add("Kebencanaan")
-        list.add("Bantuan")
+        list.add("Posko Bantuan")
         inputBerita_SpinnerJenis.setItems(list)
 
         inputBerita_SpinnerJenis.setOnItemSelectedListener { view, position, id, item ->
@@ -146,7 +147,7 @@ class BeritaInput : AppCompatActivity(), View.OnClickListener {
                     uriImage,
                     "",
                     false,
-                    kordinatBantuan!!
+                    GeoPoint(kordinatBantuan!!.latitude, kordinatBantuan!!.longitude)
                 )
 
                 firestoreViewModel.inputBeritaBantuan(berita)

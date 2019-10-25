@@ -29,7 +29,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/beritapemerintah_rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             tools:listitem="@layout/recycleview_beritadashboard"/>
 

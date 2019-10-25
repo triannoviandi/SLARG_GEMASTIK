@@ -79,5 +79,11 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.ornach.nobobutton:nobobutton:1.6'
+    implementation 'com.github.manishkummar21:AndroidPdfViewer:1.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.github.kk121:File-Loader:1.2'
+    implementation 'com.karumi:dexter:5.0.0'
+    implementation 'com.github.ameriod:Android-Pdf-Viewer:1.0.0'
 
 }

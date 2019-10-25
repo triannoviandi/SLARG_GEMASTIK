@@ -38,8 +38,8 @@ class BerandaActivity : AppCompatActivity() {
                 Log.d("wewe", "truee")
                 viewModel.getProfile().observe(this, Observer {
                     beranda_imgPhoto.setImageBitmap(decodeBase64(it.fotoProfile))
-                    beranda_tvNama.setText(it.nama)
-                    beranda_tvLokasi.setText(it.kota + ", " + it.provinsi)
+                    beranda_tvNama.text = it.nama
+                    beranda_tvLokasi.text = it.kota + ", " + it.provinsi
                 })
             } else {
                 Log.d("wewe", "Tidak ada data")

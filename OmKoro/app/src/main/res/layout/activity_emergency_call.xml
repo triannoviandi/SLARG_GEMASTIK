@@ -192,7 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:text="Pemadam Kebakaran"
+                    android:text="Pemadam"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/colorPrimaryDark"
                     />

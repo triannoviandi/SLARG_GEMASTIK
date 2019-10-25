@@ -14,4 +14,12 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="TabLayoutTextFont" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="fontFamily">@font/opensans_regular</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide</item>
+    </style>
+
     </resources>

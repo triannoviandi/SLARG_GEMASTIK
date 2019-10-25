@@ -18,56 +18,70 @@
         tools:context=".view.ui.family.FamilyMapActivity" />
 
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        android:layout_margin="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="#fff"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="32dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="Tampilkan Anggota Keluarga"
-            android:fontFamily="@font/opensans_regular"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginBottom="16dp"
-            />
 
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            app:ms_background_color="#f0f1f5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Robert Downey"
-            android:textAlignment="center"
-            android:fontFamily="@font/opensans_regular"
-            />
+            android:background="#fff"
+            android:orientation="vertical"
+            android:padding="32dp">
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorPrimaryDark"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Tampilkan Anggota Keluarga"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginBottom="16dp"
+                />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="Mohon untuk mengutamakan keselamatan diri anda terlebih dahulu"
-            android:fontFamily="@font/opensans_regular"
-            android:textColor="@color/colorPrimaryDark"
-            />
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                app:ms_background_color="#f0f1f5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Robert Downey"
+                android:textAlignment="center"
+                android:id="@+id/familyMap_spinner"
+                android:fontFamily="@font/opensans_regular"
+                />
 
-    </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorPrimaryDark"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Mohon untuk mengutamakan keselamatan diri anda terlebih dahulu"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import id.trian.omkoro.R
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.app.ComponentActivity.ExtraData
@@ -27,9 +29,12 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.gms.common.util.Hex
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.*
+import com.google.maps.android.PolyUtil
+import kotlinx.android.synthetic.main.activity_evakuasi.*
 
 
 class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -38,6 +43,179 @@ class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
     val LOCATION_PERMISSION = 42
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+
+    private val mutableList : MutableList<LatLng> = ArrayList()
+    private val mutableList2 : MutableList<LatLng> = ArrayList()
+    private val mutableList3 : MutableList<LatLng> = ArrayList()
+
+
+    private fun initList() {
+        mutableList.clear()
+        mutableList2.clear()
+        mutableList3.clear()
+
+        mutableList.add(LatLng(-0.807410, 119.810811))
+        mutableList.add(LatLng(-0.827042, 119.811498))
+        mutableList.add(LatLng(-0.842833, 119.819308))
+        mutableList.add(LatLng(-0.848873, 119.824866))
+        mutableList.add(LatLng(-0.878084, 119.839650))
+        mutableList.add(LatLng(-0.883105, 119.866387))
+        mutableList.add(LatLng(-0.873750, 119.869004))
+        mutableList.add(LatLng(-0.861435, 119.876558))
+        mutableList.add(LatLng(-0.855869, 119.875793))
+        mutableList.add(LatLng(-0.833513, 119.878325))
+        mutableList.add(LatLng(-0.829136, 119.876608))
+        mutableList.add(LatLng(-0.822742, 119.880299))
+        mutableList.add(LatLng(-0.818880, 119.877381))
+        mutableList.add(LatLng(-0.804204, 119.874377))
+        mutableList.add(LatLng(-0.784851, 119.857726))
+        mutableList.add(LatLng(-0.771849, 119.855365))
+        mutableList.add(LatLng(-0.761894, 119.856653))
+        mutableList.add(LatLng(-0.755114, 119.858584))
+        mutableList.add(LatLng(-0.742970, 119.852018))
+        mutableList.add(LatLng(-0.724217, 119.854636))
+        mutableList.add(LatLng(-0.704467, 119.846353))
+        mutableList.add(LatLng(-0.700165, 119.850805))
+        mutableList.add(LatLng(-0.705057, 119.860419))
+        mutableList.add(LatLng(-0.712867, 119.865676))
+        mutableList.add(LatLng(-0.718231, 119.867564))
+        mutableList.add(LatLng(-0.727178, 119.863229))
+        mutableList.add(LatLng(-0.740545, 119.864538))
+        mutableList.add(LatLng(-0.756808, 119.867671))
+        mutableList.add(LatLng(-0.770616, 119.869924))
+        mutableList.add(LatLng(-0.788510, 119.874044))
+        mutableList.add(LatLng(-0.800181, 119.881512))
+        mutableList.add(LatLng(-0.809708, 119.883014))
+        mutableList.add(LatLng(-0.822195, 119.888807))
+        mutableList.add(LatLng(-0.833352, 119.885717))
+        mutableList.add(LatLng(-0.850387, 119.885846))
+        mutableList.add(LatLng(-0.864204, 119.883571))
+        mutableList.add(LatLng(-0.882141, 119.877477))
+        mutableList.add(LatLng(-0.889307, 119.869109))
+        mutableList.add(LatLng(-0.891195, 119.855676))
+        mutableList.add(LatLng(-0.885831, 119.838296))
+        mutableList.add(LatLng(-0.879910, 119.831343))
+        mutableList.add(LatLng(-0.859785, 119.820658))
+        mutableList.add(LatLng(-0.837857, 119.809371))
+        mutableList.add(LatLng(-0.815801, 119.804908))
+        mutableList.add(LatLng(-0.810534, 119.804962))
+
+        mutableList2.add(LatLng( -0.700165, 119.850805))
+        mutableList2.add(LatLng( -0.705057, 119.860419))
+        mutableList2.add(LatLng( -0.712867, 119.865676))
+        mutableList2.add(LatLng( -0.718231, 119.867564))
+        mutableList2.add(LatLng( -0.727178, 119.863229))
+        mutableList2.add(LatLng( -0.740545, 119.864538))
+        mutableList2.add(LatLng( -0.756808, 119.867671))
+        mutableList2.add(LatLng( -0.770616, 119.869924))
+        mutableList2.add(LatLng( -0.788510, 119.874044))
+        mutableList2.add(LatLng( -0.800181, 119.881512))
+        mutableList2.add(LatLng( -0.809708, 119.883014))
+        mutableList2.add(LatLng( -0.822195, 119.888807))
+        mutableList2.add(LatLng( -0.833352, 119.885717))
+        mutableList2.add(LatLng( -0.850387, 119.885846))
+        mutableList2.add(LatLng( -0.864204, 119.883571))
+        mutableList2.add(LatLng( -0.882141, 119.877477))
+        mutableList2.add(LatLng( -0.889307, 119.869109))
+        mutableList2.add(LatLng( -0.891195, 119.855676))
+        mutableList2.add(LatLng( -0.885831, 119.838296))
+        mutableList2.add(LatLng( -0.879910, 119.831343))
+        mutableList2.add(LatLng( -0.859785, 119.820658))
+        mutableList2.add(LatLng( -0.837857, 119.809371))
+        mutableList2.add(LatLng( -0.815801, 119.804908))
+        mutableList2.add(LatLng( -0.810534, 119.804962))
+        mutableList2.add(LatLng( -0.813602, 119.797602))
+        mutableList2.add(LatLng( -0.819202, 119.795467))
+        mutableList2.add(LatLng( -0.839069, 119.806109))
+        mutableList2.add(LatLng( -0.862027, 119.815283))
+        mutableList2.add(LatLng( -0.887709, 119.825463))
+        mutableList2.add(LatLng( -0.896097, 119.836461))
+        mutableList2.add(LatLng( -0.898779, 119.866116))
+        mutableList2.add(LatLng( -0.887365, 119.888689))
+        mutableList2.add(LatLng( -0.849733, 119.895234))
+        mutableList2.add(LatLng( -0.814717, 119.899353))
+        mutableList2.add(LatLng( -0.775239, 119.886994))
+        mutableList2.add(LatLng( -0.718456, 119.872531))
+        mutableList2.add(LatLng( -0.702665, 119.864377))
+        mutableList2.add(LatLng( -0.696314, 119.856738))
+
+
+        mutableList3.add(LatLng( -0.700165, 119.850805))
+        mutableList3.add(LatLng( -0.813602, 119.797602))
+        mutableList3.add(LatLng( -0.819202, 119.795467))
+        mutableList3.add(LatLng( -0.839069, 119.806109))
+        mutableList3.add(LatLng( -0.862027, 119.815283))
+        mutableList3.add(LatLng( -0.887709, 119.825463))
+        mutableList3.add(LatLng( -0.896097, 119.836461))
+        mutableList3.add(LatLng( -0.898779, 119.866116))
+        mutableList3.add(LatLng( -0.887365, 119.888689))
+        mutableList3.add(LatLng( -0.849733, 119.895234))
+        mutableList3.add(LatLng( -0.814717, 119.899353))
+        mutableList3.add(LatLng( -0.775239, 119.886994))
+        mutableList3.add(LatLng( -0.718456, 119.872531))
+        mutableList3.add(LatLng( -0.702665, 119.864377))
+        mutableList3.add(LatLng( -0.696314, 119.856738))
+        mutableList3.add(LatLng( -0.693729, 119.875664))
+        mutableList3.add(LatLng( -0.701957, 119.887895))
+        mutableList3.add(LatLng( -0.716129, 119.898236))
+        mutableList3.add(LatLng( -0.776301, 119.920886))
+        mutableList3.add(LatLng( -0.814867, 119.930810))
+        mutableList3.add(LatLng( -0.849551, 119.922496))
+        mutableList3.add(LatLng( -0.956762, 119.966248))
+        mutableList3.add(LatLng( -0.964191, 119.956508))
+        mutableList3.add(LatLng( -0.933296, 119.884411))
+        mutableList3.add(LatLng( -0.943852, 119.878617))
+        mutableList3.add(LatLng( -0.937330, 119.829093))
+        mutableList3.add(LatLng( -0.930893, 119.820424))
+        mutableList3.add(LatLng( -0.852797, 119.765975))
+        mutableList3.add(LatLng( -0.836630, 119.761975))
+    }
+
+    private fun checkPolygonPosition(){
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            initList()
+            val myLoc = LatLng(it.latitude, it.longitude)
+            val checkZonaMerah = PolyUtil.containsLocation(myLoc, mutableList, false)
+            val checkZonaKuning = PolyUtil.containsLocation(myLoc, mutableList2, false)
+            val checkZonaHijau = PolyUtil.containsLocation(myLoc, mutableList3, false)
+
+            when {
+                checkZonaMerah -> {
+                    changeStatus(3)
+                }
+                checkZonaKuning -> {
+                    changeStatus(2)
+                }
+                checkZonaHijau -> {
+                    changeStatus(1)
+                } else -> {
+                changeStatus(1)
+            }
+            }
+        }
+    }
+
+    private fun changeStatus(i: Int) {
+
+        if (i == 1){
+            evakuasi_img.setImageResource(R.drawable.statusgreen)
+            evakuasi_title.text = "Anda berada diwilayah aman Tsunami"
+            evakuasi_body.text = "Mohon untuk tidak mendekat wilayah bahaya tinggi tsunami"
+        } else if (i ==2 ){
+            evakuasi_img.setImageResource(R.drawable.statusyellow)
+            evakuasi_title.text = "Anda berada diwilayah bahaya tsunami sedang"
+            evakuasi_body.text = "Mohon untuk segera mencari tempat lebih tinggi!"
+        } else if (i==3){
+            evakuasi_img.setImageResource(R.drawable.statusred)
+            evakuasi_title.text = "Anda berada diwilayah bahaya tsunami tinggi"
+            evakuasi_body.text = "Mohon segera mungkin berpindah ke wilayah aman!"
+        } else {
+            evakuasi_img.setImageResource(R.drawable.statusgreen)
+            evakuasi_title.text = "Anda berada diwilayah aman Tsunami"
+            evakuasi_body.text = "Mohon untuk tidak mendekat wilayah bahaya tinggi tsunami"
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +235,8 @@ class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        checkPolygonPosition()
     }
 
     /**
@@ -69,7 +249,10 @@ class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+
         mMap = googleMap
+        mMap.uiSettings.isZoomControlsEnabled = false
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
 
@@ -258,10 +441,10 @@ class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     private fun updateMapLocation(location: Location?) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(-0.885818, 119.869112)))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(15.0f))
-        mMap.addMarker(MarkerOptions().position(LatLng(-0.885818, 119.869112)).title("Posisi Anda").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_logistic)))
-        Toast.makeText(this, "update", Toast.LENGTH_SHORT).show()
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(location!!.latitude, location.longitude)))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(18.0f))
+        mMap.addMarker(MarkerOptions().position(LatLng(location.latitude, location.longitude)).title("Posisi Anda").icon(getMarker()))
+       // Toast.makeText(this, "update", Toast.LENGTH_SHORT).show()
     }
 
     private fun initLocationTracking() {
@@ -287,6 +470,13 @@ class EvakuasiActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
+    private fun getMarker(): BitmapDescriptor? {
+        var vectorDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_marker_evakuasi, null)
+        var bitmap = Bitmap.createBitmap(vectorDrawable!!.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(bitmap)
+        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
 
 }

@@ -119,13 +119,28 @@ class FamilyViewModel: ViewModel() {
         return listRequestProfile
     }
 
-    fun acceptRequestFamily(uid : String){
-        firebaseRepository.acceptFamilyRequest(uid).addOnSuccessListener {
-            Log.d("firebasetracker", "success add to family list")
-            firebaseRepository.deleteFamilyRequest(uid).addOnSuccessListener {
-                Log.d("firebasetracker", "success to delete request")
+    fun acceptRequestFamily(user : User): MutableLiveData<Boolean>{
+        var addSuccess: MutableLiveData<Boolean> = MutableLiveData()
+        addSuccess.value = false
+        firebaseRepository.acceptFamilyRequest(user).addOnSuccessListener {
+            firebaseRepository.getProfile().addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                if (documentSnapshot != null){
+                    if (documentSnapshot.exists()){
+                        val myaccount = documentSnapshot.toObject(User::class.java)
+                        firebaseRepository.alsoSetUrFamily(myaccount!!, user.uid).addOnSuccessListener {
+                            Log.d("firebasetracker", "success add to family list")
+                            firebaseRepository.deleteFamilyRequest(user.uid).addOnSuccessListener {
+                                Log.d("firebasetracker", "success to delete request")
+                                addSuccess.value = true
+                            }
+                        }
+                    }
+                }
+
             }
         }
+        return addSuccess
+
     }
 
     fun deleteRequestFamily(uid: String){

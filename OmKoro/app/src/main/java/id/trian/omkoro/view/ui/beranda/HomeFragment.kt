@@ -1,6 +1,7 @@
 package id.trian.omkoro.view.ui.beranda
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,10 +11,9 @@ import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -41,14 +41,16 @@ import id.trian.omkoro.view.ui.panduan.*
 import id.trian.omkoro.service.model.*
 import java.io.ByteArrayOutputStream
 import id.trian.omkoro.view.adapter.*
-
+import id.trian.omkoro.viewmodel.GetBeritaViewModel
 
 class HomeFragment : Fragment(), View.OnClickListener {
-
 
     lateinit var homeViewModel: HomeViewModel
     lateinit var viewModel : ProfileViewModel
     lateinit var linearLayout: LinearLayout
+    lateinit var dialog : AlertDialog
+
+    lateinit var getBeritaViewModel : GetBeritaViewModel
     lateinit var recycleViewBerita : RecyclerView
 
     override fun onCreateView(
@@ -56,10 +58,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        getBeritaViewModel = ViewModelProviders.of(this)
+            .get(GetBeritaViewModel::class.java)
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-
         return root
     }
 
@@ -87,32 +90,49 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 ProfileSettingActivity::class.java
             ))
         }
-
     }
 
     private fun callAdapter(){
-        var listBeritaHome = ArrayList<BeritaHome>()
-        val img1 : Bitmap = resources.getDrawable(R.drawable.b1).toBitmap()
-        val img2 : Bitmap = resources.getDrawable(R.drawable.b2).toBitmap()
-        val img3 : Bitmap = resources.getDrawable(R.drawable.b3).toBitmap()
-        val img4 : Bitmap = resources.getDrawable(R.drawable.b4).toBitmap()
-        val img5 : Bitmap = resources.getDrawable(R.drawable.b5).toBitmap()
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img1))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa",img2))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img3))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img4))
-        listBeritaHome.add(BeritaHome("Bantuan BMKG tepat sasaran di Daerah Palu", "aaaaa", img5))
-        val mutableList : MutableList<BeritaHome> = listBeritaHome
-        var beritaAdapter = BeritaHomeAdapter(mutableList)
+        dialog()
+        getBeritaViewModel.getBeritaKebencanaanPemerintah()!!.observe(this, Observer {
+            if (!it.isEmpty()){
+                var listBeritaKebencanaanPemerintah = ArrayList<BeritaGET>()
+                it.forEach {thisBerita ->
+                    listBeritaKebencanaanPemerintah.add(thisBerita)
+                }
+                val mutableList : MutableList<BeritaGET> = listBeritaKebencanaanPemerintah
+                var beritaAdapter = BeritaHomeAdapter(mutableList)
 
-        beritaAdapter.setOnItemClickCallback(object : BeritaHomeAdapter.OnItemClickCallback{
-            override fun onItemClicked(data: BeritaHome) {
+                beritaAdapter.setOnItemClickCallback(object : BeritaHomeAdapter.OnItemClickCallback{
+                    override fun onItemClicked(data: BeritaGET) {
+                        var beritaPass = BeritaGETLatLong(
+                            data.id,
+                            data.category,
+                            data.title,
+                            data.body,
+                            data.author,
+                            data.image,
+                            data.uid_author,
+                            data.government,
+                            data.location.latitude,
+                            data.location.longitude,
+                            data.publish_date
+                        )
+
+                        var intent = Intent(context, BeritaDetail::class.java)
+                        intent.putExtra("detail_berita", beritaPass)
+                        intent.putExtra("bantuan", false)
+                        startActivity(intent)
+                    }
+                })
+                dialog.dismiss()
+                val adapter = beritaAdapter
+                recycleViewBerita.adapter = adapter
+            } else {
+                dialog.dismiss()
             }
-
+            //dialog.dismiss()
         })
-
-        val adapter = beritaAdapter
-        recycleViewBerita.adapter = adapter
     }
 
     private fun getProfile(){
@@ -120,8 +140,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
             if (it){
                 viewModel.getProfile().observe(this, Observer {
                     home_imgPhoto.setImageBitmap(decodeBase64(it.fotoProfile))
-                    home_tvNama.setText(it.nama)
-                    home_tvLokasi.setText(it.kota + ", " + it.provinsi)
+                    home_tvNama.text = it.nama
+                    home_tvLokasi.text = it.kota + ", " + it.provinsi
                 })
             } else {
                 Log.d("wewe", "Tidak ada data")
@@ -172,6 +192,50 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 home_locationLayout.visibility = View.GONE
             }
         })
+    }
+
+    fun dialog(){
+        val padding  = 30
+        val ll : LinearLayout = LinearLayout(context)
+        ll.orientation = LinearLayout.HORIZONTAL
+        ll.setPadding(padding, padding, padding, padding)
+        ll.gravity = Gravity.CENTER
+        var llParam = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        llParam.gravity = Gravity.CENTER
+        ll.layoutParams = llParam
+
+        val progressBar = ProgressBar(context)
+        progressBar.isIndeterminate = true
+        progressBar.setPadding(0,0, padding,0)
+        progressBar.layoutParams = llParam
+
+        llParam = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        llParam.gravity = Gravity.CENTER
+        val tvText= TextView(context)
+        tvText.text = "Loading ..."
+        tvText.setTextColor(Color.parseColor("#000000"))
+        tvText.layoutParams = llParam
+
+        ll.addView(progressBar)
+        ll.addView(tvText)
+
+        val builder = AlertDialog.Builder(context)
+        builder.setCancelable(true)
+        builder.setView(ll)
+
+        dialog = builder.create()
+        dialog.show()
+        val window = dialog.window
+        if (window != null){
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(dialog.window!!.attributes)
+            layoutParams.width = 700
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            dialog.window!!.attributes = layoutParams
+        }
     }
 
 

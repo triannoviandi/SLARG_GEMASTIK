@@ -16,11 +16,13 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import id.trian.omkoro.viewmodel.DashboardViewModel
-import id.trian.omkoro.R
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import id.trian.omkoro.view.adapter.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import android.graphics.Typeface
+import id.trian.omkoro.*
+
 
 class DashboardFragment : Fragment() {
 
@@ -49,6 +51,32 @@ class DashboardFragment : Fragment() {
         view.tablayout.setupWithViewPager(berita_viewPager)
         view.berita_buttonBuatBerita.setOnClickListener {
             activity!!.startActivity(Intent(view.context, BeritaInput::class.java))
+        }
+
+     //   setCustomFont()
+    }
+
+    fun setCustomFont() {
+
+
+
+        val vg = tablayout.getChildAt(0) as ViewGroup
+        val tabsCount = vg.childCount
+
+        for (j in 0 until tabsCount) {
+            val vgTab = vg.getChildAt(j) as ViewGroup
+
+            val tabChildsCount = vgTab.childCount
+
+            for (i in 0 until tabChildsCount) {
+                val tabViewChild = vgTab.getChildAt(i)
+                if (tabViewChild is TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    tabViewChild.typeface =
+                        Typeface.createFromAsset(context!!.assets, "font/opensans_light")
+                }
+            }
         }
     }
 

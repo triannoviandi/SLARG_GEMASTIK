@@ -20,7 +20,7 @@ class FamilyRequestAdapter(private val list: MutableList<User>) : RecyclerView.A
 
     private var onItemClickCallback: OnItemClickCallback? = null
 
-    public fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 

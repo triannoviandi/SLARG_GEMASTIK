@@ -8,18 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import id.trian.omkoro.R
+import id.trian.omkoro.service.model.BeritaGET
 import id.trian.omkoro.service.model.BeritaHome
 import id.trian.omkoro.service.model.User
+import kotlinx.android.synthetic.main.activity_berita_detail.*
 import kotlinx.android.synthetic.main.recycleview_beritaterbaru.view.*
 import kotlinx.android.synthetic.main.recycleview_family.view.*
 
 
-class BeritaHomeAdapter(private val list: MutableList<BeritaHome>) : RecyclerView.Adapter<BeritaHomeAdapter.UserViewHolder>() {
+class BeritaHomeAdapter(private val list: MutableList<BeritaGET>) : RecyclerView.Adapter<BeritaHomeAdapter.UserViewHolder>() {
 
     private var onItemClickCallback: OnItemClickCallback? = null
 
-    public fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
@@ -33,16 +36,18 @@ class BeritaHomeAdapter(private val list: MutableList<BeritaHome>) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        Log.d("galih", "onbind")
         holder.bindItems(list[position])
     }
 
     //the class is hodling the list view
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(berita: BeritaHome) {
-           itemView.recycleview_berita_image.setImageBitmap(berita.gambar)
-            itemView.recycleview_berita_judul.text = berita.judul
+        fun bindItems(berita: BeritaGET) {
+           //itemView.recycleview_berita_image.setImageBitmap(berita. )
+            itemView.recycleview_berita_judul.text = berita.title
+            Glide.with(itemView.context).load(berita.image).centerCrop().placeholder(R.drawable.berita_background).into(itemView.recycleview_berita_image)
+
             itemView.setOnClickListener {
+                Log.d("galihberita", "siniadap")
                 onItemClickCallback?.onItemClicked(berita)
             }
         }
@@ -55,6 +60,6 @@ class BeritaHomeAdapter(private val list: MutableList<BeritaHome>) : RecyclerVie
 
     }
     interface OnItemClickCallback {
-        fun onItemClicked(data: BeritaHome)
+        fun onItemClicked(data: BeritaGET)
     }
 }
